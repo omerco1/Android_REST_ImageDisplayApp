@@ -19,6 +19,7 @@ import android.webkit.DownloadListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,8 +89,9 @@ public class MainActivity extends AppCompatActivity {
         //final ImageView imageView = (ImageView) findViewById(R.id.imageView);
         Context myOnCreateContext = getApplicationContext();
         mImageRetriever = ImageRetriever.getInstance(this);
+        RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
 
-        dbObj = ImageRatingDbHelper.initialize(this);
+        ImageRatingDbHelper.initialize(this);
 
         final Bitmap myBmap;
 
@@ -102,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
                                     int position, long id) {
                 //Launch Fragment
                 String tempUri = gvAdapter.getItem(position).toString();
-                int tempID = gvAdapter.getID(position);
+                Log.d("tempUri", tempUri);
+                //int tempID = gvAdapter.getID(position);
 
 //                BlankFragment dialogFragment = BlankFragment.newInstance(tempID, tempUri, ImageRatingDatabaseHelper.GetInstance().getRatingOfId(tempID));
 //                android.app.FragmentManager fm = getFragmentManager();
@@ -113,13 +116,12 @@ public class MainActivity extends AppCompatActivity {
         jsonAdapt = new jsonResponseAdapter(myOnCreateContext, mImageRetriever, gv, gvAdapter);
         //gridViewArrayAdapter.notifyDataSetChanged();
 
-
-
-        Log.d("Init", "initializing retriever");
-
-
-        Log.d("Testing bm", "outerbm");
-        Log.d("bmArrList: ", Integer.toString(mImageRetriever.bmArr.size()));
+        rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                
+            }
+        });
 
     }
 
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void clearTable(View view) {
         ImageRatingDbHelper.getInstance().deleteDB();
-        gvAdapter.uriList.clear();
+        gvAdapter.myUrlList.clear();
         gvAdapter.notifyDataSetInvalidated();
 
     }

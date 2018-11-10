@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class jsonResponseAdapter implements Response.Listener<JSONArray> {
     ArrayList<String> myArrList = new ArrayList<String>();
@@ -26,6 +27,7 @@ public class jsonResponseAdapter implements Response.Listener<JSONArray> {
     GridView gv;
     ImageRatingDbHelper RDH = ImageRatingDbHelper.getInstance();
     MyAdapter gvAdapt;
+    int x = 0;
 
     public jsonResponseAdapter(Context myOnCreateContext, ImageRetriever mImageRetriever, GridView gv, MyAdapter gvAdapt) {
         this.mImageRetriever = mImageRetriever;
@@ -48,12 +50,17 @@ public class jsonResponseAdapter implements Response.Listener<JSONArray> {
             Log.d("FILTER", myArrList.get(31));
             Log.d("below filter",  Integer.toString(  myArrList.size()));
 
+            //ImageRatingDbHelper.initialize(OnCreateContext);
+
+            Random rn = new Random();
+            int answer = rn.nextInt(1000) + 1;
 
             //TODO GET URI AND POST IT TO DB HERE
             for (int i = 0; i < myArrList.size(); i++) {
-                //RDH.addPost("", myArrList.get(i), 0);
+                ImageRatingDbHelper.getInstance().addPost("temp"+Integer.toString(x+ answer), myArrList.get(i), 0);
 //                Log.d("notNull", myArrList.get(i));
                 gvAdapt.updateValues(myArrList.get(i));
+                x++;
 
             }
             gvAdapt.notifyDataSetInvalidated();

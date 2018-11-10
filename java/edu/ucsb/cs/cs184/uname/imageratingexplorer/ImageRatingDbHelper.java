@@ -3,9 +3,11 @@ package edu.ucsb.cs.cs184.uname.imageratingexplorer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +18,14 @@ import java.util.List;
 
 public class ImageRatingDbHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "ImageRatingDatabase.db";
-
+    private static final String TABLE_NAME = "Post";
+    private static final String sqlCMD = "CREATE TABLE " + TABLE_NAME + " (Id integer PRIMARY KEY AUTOINCREMENT, Url text NOT NULL UNIQUE,  Uri text NOT NULL UNIQUE, Rating real);";
     private static ImageRatingDbHelper instance;
     private List<OnDatabaseChangeListener> observers;
+    protected static final int DATABASE_VERSION = 2;
 
     private ImageRatingDbHelper(Context context) {
-        super(context, DB_NAME, null, 1);
+        super(context, DB_NAME, null, 2);
         observers = new ArrayList<>();
     }
 
@@ -66,22 +70,27 @@ public class ImageRatingDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         //Create the SQLite table
-        db.execSQL(
-                "CREATE TABLE Image (Id integer PRIMARY KEY AUTOINCREMENT, Uri text NOT NULL UNIQUE, Url text NOT NULL UNIQUE, Rating real);");
+        db.execSQL(sqlCMD);
+        db.setVersion(3);
     }
 
     public void addPost(String uri, String url, int rating) {
         ContentValues insertion = new ContentValues();
-        insertion.put("URI", uri);
-        insertion.put("URL", url);
+
+
+        insertion.put("Url", url);
+        insertion.put("Uri", uri);
         insertion.put("Rating", rating);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert("Post", null, insertion);
+        db.insert(TABLE_NAME, null, insertion);
         db.close();
     }
 
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
     }
 
     public interface OnDatabaseChangeListener {

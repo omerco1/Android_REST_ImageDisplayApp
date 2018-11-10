@@ -27,7 +27,7 @@ public class MyAdapter extends BaseAdapter {
     private Context myContext;
     private ImageView im;
 
-    public ArrayList<String> uriList = new ArrayList<String>();
+    public ArrayList<String> myUrlList = new ArrayList<String>();
     private ArrayList<Integer> idList = new ArrayList<Integer>();
     ArrayList<Bitmap> myBMArr;
 
@@ -41,23 +41,23 @@ public class MyAdapter extends BaseAdapter {
 //    }
 
     public void updateValues(String url) {
-        this.uriList.add(url);
-        Log.d("notNull", this.uriList.get(0));
+        this.myUrlList.add(url);
+        Log.d("notNull", this.myUrlList.get(0));
 
     }
 
     @Override
     public int getCount() {
-        if (uriList == null) {
+        if (myUrlList == null) {
             return 0;
         } else {
-            return uriList.size();
+            return myUrlList.size();
         }
     }
 
     @Override
     public Object getItem(int position) {
-        return uriList.get(position);
+        return myUrlList.get(position);
     }
 
     public int getID(int position) { return idList.get(position); }
@@ -78,7 +78,7 @@ public class MyAdapter extends BaseAdapter {
 //                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             im = new ImageView(myContext);
-            im.setLayoutParams(new GridView.LayoutParams(200, 200));
+            im.setLayoutParams(new GridView.LayoutParams(300, 300));
             im.setScaleType(ImageView.ScaleType.CENTER_CROP);
             im.setPadding(5, 5, 5, 5);
 
@@ -86,7 +86,7 @@ public class MyAdapter extends BaseAdapter {
             im = (ImageView) convertView;
         }
 
-        Picasso.with(myContext).load(uriList.get(position)).resize(200, 200).centerCrop().into(im);
+        Picasso.with(myContext).load(myUrlList.get(position)).resize(300, 300).centerCrop().into(im);
 
         return im;
     }
