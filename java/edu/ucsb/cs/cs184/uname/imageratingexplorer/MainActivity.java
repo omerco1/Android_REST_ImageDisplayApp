@@ -1,5 +1,8 @@
 package edu.ucsb.cs.cs184.uname.imageratingexplorer;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -91,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
         mImageRetriever = ImageRetriever.getInstance(this);
         RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
 
+
+
         ImageRatingDbHelper.initialize(this);
 
         final Bitmap myBmap;
@@ -105,11 +110,14 @@ public class MainActivity extends AppCompatActivity {
                 //Launch Fragment
                 String tempUri = gvAdapter.getItem(position).toString();
                 Log.d("tempUri", tempUri);
-                //int tempID = gvAdapter.getID(position);
+                int DbId = ImageRatingDbHelper.getInstance().getDbId(tempUri);
+                if (DbId == -1) { Log.d("error", "DBID is -1"); }
 
-//                BlankFragment dialogFragment = BlankFragment.newInstance(tempID, tempUri, ImageRatingDatabaseHelper.GetInstance().getRatingOfId(tempID));
-//                android.app.FragmentManager fm = getFragmentManager();
-//                dialogFragment.show(fm,"Dialog");
+                Log.d("position", Integer.toString(position));
+
+                myDiaFrag  df = myDiaFrag.newInstance(DbId, tempUri,  ImageRatingDbHelper.getInstance().getRatingFor(DbId));
+                df.show(getSupportFragmentManager(), "title");
+
             }
         });
 
@@ -134,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         ImageRatingDbHelper.getInstance().close();
 
 

@@ -28,8 +28,13 @@ public class MyAdapter extends BaseAdapter {
     private ImageView im;
 
     public ArrayList<String> myUrlList = new ArrayList<String>();
-    private ArrayList<Integer> idList = new ArrayList<Integer>();
+    private ArrayList<Integer> myIdArr = new ArrayList<Integer>();
     ArrayList<Bitmap> myBMArr;
+
+    public int getDbId(int position) {
+        return myIdArr.get(position);
+    }
+
 
     public MyAdapter(Context context) {
         myContext = context;
@@ -60,7 +65,7 @@ public class MyAdapter extends BaseAdapter {
         return myUrlList.get(position);
     }
 
-    public int getID(int position) { return idList.get(position); }
+
 
     @Override
     public long getItemId(int position) {
@@ -81,7 +86,6 @@ public class MyAdapter extends BaseAdapter {
             im.setLayoutParams(new GridView.LayoutParams(300, 300));
             im.setScaleType(ImageView.ScaleType.CENTER_CROP);
             im.setPadding(5, 5, 5, 5);
-
         } else {
             im = (ImageView) convertView;
         }
