@@ -70,7 +70,7 @@ public class myDiaFrag extends DialogFragment {
         });
 
 
-        Picasso.with(getActivity()).load(imageURL).resize(1500, 1500).centerInside().into(im);
+        Picasso.with(getActivity()).load(imageURL).resize(1600, 1600).centerInside().into(im);
 
         return v;
     }

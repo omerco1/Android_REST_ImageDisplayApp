@@ -54,8 +54,6 @@ public class jsonResponseAdapter implements Response.Listener<JSONArray> {
 
             Random rn = new Random();
             int answer = rn.nextInt(1000) + 1;
-
-            //TODO GET URI AND POST IT TO DB HERE
             for (int i = 0; i < myArrList.size(); i++) {
                 ImageRatingDbHelper.getInstance().addPost("temp"+Integer.toString(x+ answer), myArrList.get(i), 0);
 //                Log.d("notNull", myArrList.get(i));

@@ -10,10 +10,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
     ImageRatingDbHelper dbObj;
 
+    FloatingActionButton cam;
+    FloatingActionButton gal;
 
 
 
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final TextView textView = (TextView) findViewById(R.id.textView);
         //final ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        Context myOnCreateContext = getApplicationContext();
+        final Context myOnCreateContext = getApplicationContext();
         mImageRetriever = ImageRetriever.getInstance(this);
         RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
 
@@ -124,10 +128,37 @@ public class MainActivity extends AppCompatActivity {
         jsonAdapt = new jsonResponseAdapter(myOnCreateContext, mImageRetriever, gv, gvAdapter);
         //gridViewArrayAdapter.notifyDataSetChanged();
 
+        rb.setRating(0);
         rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                
+                gvAdapter.clearArrayLists();
+                gvAdapter.resetArrayLists(rating);
+                //gvAdapter.notifyDataSetInvalidated();
+                gvAdapter.notifyDataSetChanged();
+            }
+        });
+
+        cam = (FloatingActionButton) findViewById(R.id.cameraFAB);
+        cam.setImageResource(android.R.drawable.ic_menu_camera);
+        gal = (FloatingActionButton) findViewById(R.id.galleryFAB);
+        gal.setImageResource(android.R.drawable.ic_menu_gallery);
+
+        cam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getApplicationContext(), "Camera functionality has been left as an excercise for the grader", Toast.LENGTH_LONG);
+                Log.d("Camera FAB" , "Im in cam onCLick listener");
+            }
+        });
+
+        gal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), "gallary functionality has been left as an excercise for the grader", Toast.LENGTH_LONG);
+//                Toast.makeText(myOnCreateContext, "hi", Toast.LENGTH_SHORT);
+                Log.d("Galler FAB" , "Im in gal onCLick listener");
+
             }
         });
 
@@ -206,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
     public void clearTable(View view) {
         ImageRatingDbHelper.getInstance().deleteDB();
         gvAdapter.myUrlList.clear();
+        gvAdapter.myIdArr.clear();
         gvAdapter.notifyDataSetInvalidated();
 
     }

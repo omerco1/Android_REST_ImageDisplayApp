@@ -27,13 +27,12 @@ public class MyAdapter extends BaseAdapter {
     private Context myContext;
     private ImageView im;
 
-    public ArrayList<String> myUrlList = new ArrayList<String>();
-    private ArrayList<Integer> myIdArr = new ArrayList<Integer>();
+    ArrayList<String> myUrlList = new ArrayList<String>();
+    ArrayList<Integer> myIdArr = new ArrayList<Integer>();
     ArrayList<Bitmap> myBMArr;
 
-    public int getDbId(int position) {
-        return myIdArr.get(position);
-    }
+
+
 
 
     public MyAdapter(Context context) {
@@ -65,8 +64,6 @@ public class MyAdapter extends BaseAdapter {
         return myUrlList.get(position);
     }
 
-
-
     @Override
     public long getItemId(int position) {
         return position;
@@ -83,16 +80,40 @@ public class MyAdapter extends BaseAdapter {
 //                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             im = new ImageView(myContext);
-            im.setLayoutParams(new GridView.LayoutParams(300, 300));
+            im.setLayoutParams(new GridView.LayoutParams(400, 400));
             im.setScaleType(ImageView.ScaleType.CENTER_CROP);
             im.setPadding(5, 5, 5, 5);
         } else {
             im = (ImageView) convertView;
         }
 
-        Picasso.with(myContext).load(myUrlList.get(position)).resize(300, 300).centerCrop().into(im);
+        Picasso.with(myContext).load(myUrlList.get(position)).resize(400, 400).centerCrop().into(im);
 
         return im;
+    }
+
+    public int getDbId(int position) {
+        return myIdArr.get(position);
+    }
+
+    public void resetArrayLists(float rating) {
+        myUrlList  = ImageRatingDbHelper.getInstance().filterUrlByRating(rating);
+
+        for (int i= 0; i < myUrlList.size(); i++) {
+            try {
+                Log.d("myUrlList", myUrlList.get(i));
+            } catch (Exception e) {
+                Log.d("Pirnt error", "within resetArrayLists");
+            }
+        }
+
+        myIdArr = ImageRatingDbHelper.getInstance().filterIdByRating(rating);
+
+    }
+
+    public void clearArrayLists() {
+        myIdArr.clear();
+        myUrlList.clear();
     }
 
 

@@ -143,6 +143,39 @@ public class ImageRatingDbHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+
+    public ArrayList<String> filterUrlByRating(float rating) {
+        ArrayList<String> temp = new ArrayList<String>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT Url FROM Post WHERE Rating >= " + rating;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                temp.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        return temp;
+    }
+
+    public ArrayList<Integer> filterIdByRating(float rating) {
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT Id FROM " + TABLE_NAME + " WHERE Rating >= " + rating;
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            //iterate the cursor
+            do {
+                temp.add(c.getInt(0));
+            } while (c.moveToNext());
+        }
+        return temp;
+    }
+
+
+
+
+
+
     public interface OnDatabaseChangeListener {
         void onDbChange();
     }
